@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+# Ken Ko
+#
+# $1 is the directory you want to move your files to
+ 
+mv CSC*.diff $1
+mv CSC*.[0-9]+ $1
+
+echo "Cleanup Compelte"
