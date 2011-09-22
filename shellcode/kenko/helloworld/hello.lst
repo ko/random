@@ -1,0 +1,46 @@
+     1                                  ;----------------------------------------------------------------------------
+     2                                  ; hello.asm complete program
+     3                                  ;
+     4                                  ; from <http://www.csee.umbc.edu/help/nasm/nasm.shtml>
+     5                                  ; 2009-11-18
+     6                                  ;
+     7                                  ;  The nasm source code is hello.asm
+     8                                  ;  This demonstrates basic text output to a screen.
+     9                                  ;
+    10                                  ;  hello.asm  a first program for nasm for Linux, Intel, gcc
+    11                                  ;
+    12                                  ; 32-bit (i386) ---
+    13                                  ;       assemble:       nasm  -f elf32  -l hello.lst  hello.asm
+    14                                  ;       link:           ld   -m elf_i386  -o hello  hello.o
+    15                                  ;         or:           gcc  -o hello  hello.o  (only on 32-bit installations)
+    16                                  ;
+    17                                  ; 64-bit (x86-64/amd64) ---
+    18                                  ;       assemble:       nasm  -f elf64  -l hello.lst  hello.asm
+    19                                  ;       link:           ld   -m elf_x86_64  -o hello  hello.o
+    20                                  ;         or:           gcc  -o hello  hello.o  (only on 64-bit installations)
+    21                                  ;
+    22                                  ; run:         hello
+    23                                  ; output is:    Hello World
+    24                                  ;----------------------------------------------------------------------------
+    25                                          SECTION .data           ; data section
+    26 00000000 48656C6C6F20576F72-     msg:    db "Hello World",10     ; the string to print, 10=cr
+    27 00000009 6C640A             
+    28                                  len:    equ $-msg               ; "$" means "here"
+    29                                                                  ; len is a value, not an address
+    30                                  
+    31                                          SECTION .text           ; code section
+    32                                          global main             ; make label available to linker as invoked by gcc
+    33                                          global _start           ; make label available to linker w/ default entry
+    34                                  main:                           ; standard  gcc  entry point
+    35                                  _start:
+    36                                         
+    37 00000000 BA0C000000                      mov     edx,len         ; arg3, length of string to print
+    38 00000005 B9[00000000]                    mov     ecx,msg         ; arg2, pointer to string
+    39 0000000A BB01000000                      mov     ebx,1           ; arg1, where to write, screen
+    40 0000000F B804000000                      mov     eax,4           ; write command to int 80 hex
+    41 00000014 CD80                            int     0x80            ; interrupt 80 hex, call kernel
+    42                                         
+    43 00000016 BB00000000                      mov     ebx,0           ; exit code, 0=normal
+    44 0000001B B801000000                      mov     eax,1           ; exit command to kernel
+    45 00000020 CD80                            int     0x80            ; interrupt 80 hex, call kernel
+    46                                  ;---------------------------------------------------------------------------- 

@@ -1,0 +1,9 @@
+AMD64 ABI
+=========
+Passing arguments to system calls: 	%rdi, %rsi, %rdx, %r10, %r9, %r8
+
+Instruction we want to use: 		syscall, passed in %rax
+
+Registers destroyed:			%rcx, %r11
+
+
