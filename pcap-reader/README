@@ -1,0 +1,4 @@
+TODO:
+
+1. Use magic numbers to determine file type
+2. Partition into specific files for each capture file type
