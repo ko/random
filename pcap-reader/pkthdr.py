@@ -11,6 +11,10 @@ u8 = 'u8'
 s8 = 's8'
 
 """ reading different byte groups """
+# TODO automate this. construct the struct strings programatically
+def read_u136(byte):
+    return str(hex(struct.unpack("=IIIIb", str(byte))[0]))
+
 def read_u32(byte):
     return str(hex(struct.unpack("=I",str(byte))[0]))
 
@@ -139,12 +143,16 @@ def pcap_reader(target):
 """
 def enc_file_header(f):
 
+    """
     t1 = reads(f, u32)
     t2 = reads(f, u32)
     t3 = reads(f, u32)
     t4 = reads(f, u32)
     t5 = reads(f, u8)
     print "{0:<24} {1:<10} {2:<10} {3:<10} {4:<10} {5:<10}".format('Magic Number:', t1, t2, t3, t4, t5)
+    """
+    t1 = reads(f, 'u136')
+    print "{0:<24} {1:<50}".format('Magic Number:', t1)
     t1 = reads(f, u16)
     print "{0:<24} {1:<10}".format('Record Type:', t1)
     t1 = reads(f, u32)
@@ -269,8 +277,8 @@ def enc_reader(target):
                 print 'hi'
 
 def main():
-    pcap_reader("/Users/kenko/Desktop/20110928-170446_timestamp problem.pcap")
-#    enc_reader("/Users/kenko/Desktop/myencap.enc")
+#    pcap_reader("/Users/kenko/Desktop/20110928-170446_timestamp problem.pcap")
+    enc_reader("/Users/kenko/Desktop/myencap.enc")
 
 if __name__ == "__main__":
     main()
