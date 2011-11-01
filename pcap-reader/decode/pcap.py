@@ -42,7 +42,7 @@ def reader(target, badpkt):
             save_len = rw.reads(f, rw.u32)
             orig_len = rw.reads(f, rw.u32)
 
-            if count == (badpkt+2):
+            if count == (badpkt+3):
                 break;
 
             if count > (badpkt-3) and count < (badpkt+3):

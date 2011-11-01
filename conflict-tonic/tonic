@@ -1,0 +1,65 @@
+#!/usr/bin/python2.7
+
+################################################################################
+#
+#   Conflict Tonic
+#
+#   Note: assume no embedded conflict merges
+#
+#   TODO:
+#       * make this a class
+#
+################################################################################
+
+import os, sys
+
+FILENAME = sys.argv[1]
+original = [line.rstrip('\n') for line in open(FILENAME)]
+modified = []
+
+conflicts = []
+conflict = []
+
+lineno = 0
+for line in original:
+    beginning = line[0:4]
+    if beginning == "<<<<":
+        conflict.append(lineno)
+    elif beginning == "====":
+        conflict.append(lineno)
+    elif beginning == ">>>>":
+        conflict.append(lineno)
+        conflicts.append(conflict)
+
+    lineno += 1
+
+if conflicts:
+    for tuple in conflicts:
+
+        old = []
+        new = []
+
+        for i in range(tuple[0] + 1, tuple[1]):
+            old.append(original[i])
+        for i in range(tuple[1] + 1, tuple[2]):
+            new.append(original[i])
+
+        if old != new:
+            i = conflicts.index(tuple)
+            conflicts.pop(i)
+
+    modified = original
+    conflicts.reverse()
+    for tuple in conflicts:
+        modified.pop(tuple[2])
+        for i in range(tuple[1] , tuple[0]-1, -1):
+            modified.pop(i)
+
+    if modified != original:
+        print 'Conflicts reduced'
+        with open('./iYOUR_NEW_FILE', 'w') as f:
+            for line in modified: 
+                line += '\n'
+                f.write(line)
+    else:
+        print 'glhf'
