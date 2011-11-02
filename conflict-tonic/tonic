@@ -21,6 +21,7 @@ conflicts = []
 conflict = []
 
 lineno = 0
+# there will be an issue with comments if they contain these
 for line in original:
     beginning = line[0:4]
     if beginning == "<<<<":
@@ -32,6 +33,11 @@ for line in original:
         conflicts.append(conflict)
 
     lineno += 1
+
+def keep_new(new_file, tuple):
+    new_file.pop(tuple[2])
+    for i in range(tuple[1] , tuple[0]-1, -1):
+	new_file.pop(i)
 
 if conflicts:
     for tuple in conflicts:
@@ -51,9 +57,7 @@ if conflicts:
     modified = original
     conflicts.reverse()
     for tuple in conflicts:
-        modified.pop(tuple[2])
-        for i in range(tuple[1] , tuple[0]-1, -1):
-            modified.pop(i)
+	keep_new(modified, tuple)
 
     if modified != original:
         print 'Conflicts reduced'
@@ -63,3 +67,6 @@ if conflicts:
                 f.write(line)
     else:
         print 'glhf'
+
+
+
