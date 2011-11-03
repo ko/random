@@ -1,3 +1,4 @@
+#!/opt/local/bin/python2.7
 #!/usr/bin/python2.7
 
 ################################################################################
@@ -12,6 +13,72 @@
 ################################################################################
 
 import os, sys
+
+def keep_new(new_file, tuple):
+    new_file.pop(tuple[2])
+    for i in range(tuple[1] , tuple[0]-1, -1):
+        new_file.pop(i)
+    return new_file
+
+def keep_old(new_file, tuple):
+    for i in range(tuple[2], tuple[1]-1, -1):
+        new_file.pop(i)
+    new_file.pop(tuple[0])
+    return new_file
+
+def display_conflicts(modified, tuple):
+    for i in range(tuple[0], tuple[2]+1):
+        print modified[i]
+    print "\n1.\tKeep Old\n2.\tKeep New\n"
+    stay = 1
+    while stay:
+        opt = raw_input("[Decision]: ")
+        opt = int(opt)
+        if opt == 1:
+            modified = keep_old(modified, tuple)
+            stay = 0
+        elif opt == 2:
+            modified = keep_new(modified, tuple)
+            stay = 0
+    return modified
+
+def conflict_iterator(conflicts):
+    for tuple in conflicts:
+
+        old = []
+        new = []
+
+        for i in range(tuple[0] + 1, tuple[1]):
+            old.append(original[i])
+        for i in range(tuple[1] + 1, tuple[2]):
+            new.append(original[i])
+
+    modified = original
+    conflicts.reverse()
+    for tuple in conflicts:
+        modified = display_conflicts(modified, tuple)
+
+    for line in modified:
+        print line
+
+    print "1.\tDiscard changes\n2.\tOverwrite changes"
+    stay = 1
+    while stay:
+        opt = raw_input("[Destiny]: ")
+        opt = int(opt)
+        
+        if opt == 1:
+            stay = 0
+        elif opt == 2:
+            print 'Conflicts reduced'
+            stay = 0
+
+        """
+        with open('./iYOUR_NEW_FILE', 'w') as f:
+            for line in modified: 
+                line += '\n'
+                f.write(line)
+        """
 
 FILENAME = sys.argv[1]
 original = [line.rstrip('\n') for line in open(FILENAME)]
@@ -31,42 +98,9 @@ for line in original:
     elif beginning == ">>>>":
         conflict.append(lineno)
         conflicts.append(conflict)
-
     lineno += 1
 
-def keep_new(new_file, tuple):
-    new_file.pop(tuple[2])
-    for i in range(tuple[1] , tuple[0]-1, -1):
-	new_file.pop(i)
-
 if conflicts:
-    for tuple in conflicts:
-
-        old = []
-        new = []
-
-        for i in range(tuple[0] + 1, tuple[1]):
-            old.append(original[i])
-        for i in range(tuple[1] + 1, tuple[2]):
-            new.append(original[i])
-
-        if old != new:
-            i = conflicts.index(tuple)
-            conflicts.pop(i)
-
-    modified = original
-    conflicts.reverse()
-    for tuple in conflicts:
-	keep_new(modified, tuple)
-
-    if modified != original:
-        print 'Conflicts reduced'
-        with open('./iYOUR_NEW_FILE', 'w') as f:
-            for line in modified: 
-                line += '\n'
-                f.write(line)
-    else:
-        print 'glhf'
-
+    conflict_iterator(conflicts)
 
 
