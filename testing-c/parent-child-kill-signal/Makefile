@@ -9,3 +9,6 @@ parent:
 	$(CC) rent.c -o parent
 
 all: child parent
+
+clean:
+	rm child parent
