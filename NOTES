@@ -1,0 +1,16 @@
+/*
+ *  Useful notes in general
+ *
+ *  Ken Ko
+ *  <email@email.tld>
+ *  2011 August
+ */
+
+/* Generating a salted password for the /etc/shadow file */
+openssl passwd -1 -salt $SALT
+
+/* Format of the /etc/shadow file */
+Example: $1$ZcISAI7x$333Tcq27MmD6ZCnImhL1a.
+    
+    $hash_indicator$salt$encrypted_password
+    
