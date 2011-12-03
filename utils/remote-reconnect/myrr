@@ -1,2 +1,0 @@
-#/bin/bash
-./rr.tcl 172.20.103.15 root2
