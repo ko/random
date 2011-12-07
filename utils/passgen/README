@@ -1,6 +1,6 @@
 TODO
 ====
-1. read private key from gen.py
+1. make use of passphrase + service + username
 2. encrypt gen.py with pvt key
 3. decode gen.py with pub key
 4. decoder.py should do [2] and [3]
