@@ -5,9 +5,20 @@ import os
 import random
 
 def read_key():
-    keypath = os.getenv('HOME') + '/.ssh/id_rsa.pub'
-    with open(keypath,'rb') as f:
-        for line in f: print line
+    keypath = os.getenv('HOME') + '/.ssh/id_rsa'
+    lines = [line.strip() for line in open(keypath)]
+    start = 0; end = 0
+    for k,v in enumerate(lines):
+        if v == '-----BEGIN RSA PRIVATE KEY-----':
+            start = k+1
+        elif v == '-----END RSA PRIVATE KEY-----':
+            end = k-1
+            break
+    return {
+                'lines': lines,
+                'start': start,
+                'end': end,
+            }
 
 def get_params():
     hostname = raw_input("hostname: ")
@@ -30,26 +41,26 @@ def get_params():
             }
     return params
 
-def generate(params, k):
+def generate(params, k, passlength=16):
     s = ''
+    ascii_min = 32  # space
+    ascii_max = 126 # backtick? something visible before ^H
     """
     h = params['hostname'] 
     u = params['user']
     p = params['pass']
     print '{0},{1},{2}'.format(h,u,p)
     """ 
-    for i in range(0,16):
-        # seed should be i'th char in the private key irl
-        random.seed(i)
-        val = random.randint(32,126) 
+    for i in range(0,passlength):
+        lineno = k['end'] % passlength
+        random.seed(k['lines'][lineno][i])
+        val = random.randint(ascii_min, ascii_max) 
         s += chr(val)
 
-    print '\"' + s + '\"'
+    print '--->[' + s + ']<---'
 
-"""
 k = read_key()
-p = get_params()
-"""
-p = 1; k=2
-generate(p,k)
+p = 1
+#p = get_params()
+generate(p,k,16)
 
