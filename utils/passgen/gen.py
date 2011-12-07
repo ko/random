@@ -2,12 +2,12 @@
 import argparse
 import getpass
 import os
+import random
 
 def read_key():
     keypath = os.getenv('HOME') + '/.ssh/id_rsa.pub'
     with open(keypath,'rb') as f:
-        for line in f:
-            print line
+        for line in f: print line
 
 def get_params():
     hostname = raw_input("hostname: ")
@@ -30,15 +30,26 @@ def get_params():
             }
     return params
 
-def generate(params):
-    s = params['hostname'] 
+def generate(params, k):
+    s = ''
+    """
+    h = params['hostname'] 
     u = params['user']
     p = params['pass']
-    print '{0},{1},{2}'.format(s,u,p)
+    print '{0},{1},{2}'.format(h,u,p)
+    """ 
+    for i in range(0,16):
+        # seed should be i'th char in the private key irl
+        random.seed(i)
+        val = random.randint(32,126) 
+        s += chr(val)
 
+    print '\"' + s + '\"'
 
-
-read_key()
+"""
+k = read_key()
 p = get_params()
-generate(p)
+"""
+p = 1; k=2
+generate(p,k)
 

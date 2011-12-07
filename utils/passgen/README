@@ -1,0 +1,9 @@
+TODO
+====
+1. read private key from gen.py
+2. encrypt gen.py with pvt key
+3. decode gen.py with pub key
+4. decoder.py should do [2] and [3]
+5. tie the pieces of gen.py together
+6. test
+7. configuration for windows?
