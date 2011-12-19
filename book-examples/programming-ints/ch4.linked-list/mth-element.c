@@ -48,6 +48,10 @@ int traverse_reverse(Element *head)
     return eax;
 }
 
+/*
+ * pros: ezpz
+ * cons: stack space required is _not_ scalable. at all.
+ */
 int find_mth(Element *head, int m)
 {
     int eax = 0;
