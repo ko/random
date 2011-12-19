@@ -2,6 +2,25 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+struct list {
+    int item;
+    struct list *next;
+};
+
+void delete(struct list *list, int i)
+{
+    struct list *lpp;
+    for (lpp = &list; *lpp != NULL; lpp = &(*lpp)->next) {
+        if ((*lpp)->item == i) {
+            /* updates the correct pointer, to splice the node it
+             * refers to out of the list */
+            *lpp = (*lpp)->next;
+            break;
+        }
+    }
+    return;
+}
+
 void f(int *ip)
 {
     *ip = 5;
@@ -60,6 +79,8 @@ int main(void)
         fprintf(stderr, "OOM\n");
         return -1;
     }
+
+
 
     return 0;
 }
