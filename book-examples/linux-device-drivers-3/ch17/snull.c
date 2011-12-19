@@ -303,6 +303,9 @@ static int snull_poll(struct net_device *dev, int *budget)
     return 1;
 }
 
+/* - takes info provided by kernel and formats it into a std Ethernet hdr 
+ * - toggles bit in destination Ethernet address 
+ */
 int snull_header(struct sk_buff *skb, strut net_device *dev,
                 unsigned short type, void *daddr, void *saddr,
                 unsigned int len)
