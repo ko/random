@@ -3,6 +3,7 @@ import argparse
 import getpass
 import os
 import random
+import hashlib
 
 def read_key():
     keypath = os.getenv('HOME') + '/.ssh/id_rsa'
@@ -45,15 +46,43 @@ def generate(params, k, passlength=16):
     s = ''
     ascii_min = 32  # space
     ascii_max = 126 # backtick? something visible before ^H
-    """
+
     h = params['hostname'] 
     u = params['user']
     p = params['pass']
-    print '{0},{1},{2}'.format(h,u,p)
-    """ 
+
+    # salt pvt key with service hostname + username
+    k['lines'].append(h)
+    k['lines'].append(u)
+    salted = ''
+    for line in k['lines']:
+        salted += line
+
+    # hash the salted pvt key
+    #   keyspace for the future seed() is hella small now
+    manager = hashlib.sha1()
+    manager.update(salted)
+    hashed = manager.hexdigest()
+
+    # and now the passphrase
+    index = 0
+    passphrase = params['pass']
+    hlen = hashed.__len__()
+    plen = passphrase.__len__()
+    if hlen > plen:
+        passphrase = (passphrase*((hlen/plen+1)))[:plen]
+        print passphrase
+    elif hlen < plen:           
+        hashed = (hashed*((plen/hlen+1)))[:hlen]
+        print hashed
+
+    hashed = [ord(a) ^ ord(b) for a,b in zip(hashed,passphrase)]
+
+    # probably not remembering this piece off the top of my head
     for i in range(0,passlength):
-        lineno = k['end'] % passlength
-        random.seed(k['lines'][lineno][i])
+        index = i % hashed.__len__()
+        random.seed(hashed[index])
+        random.jumpahead((i+1)*(i+2))
         val = random.randint(ascii_min, ascii_max) 
         s += chr(val)
 
@@ -61,6 +90,6 @@ def generate(params, k, passlength=16):
 
 k = read_key()
 p = 1
-#p = get_params()
+p = get_params()
 generate(p,k,16)
 
