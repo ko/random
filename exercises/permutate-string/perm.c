@@ -17,6 +17,7 @@ void permute(char *s, int start, int end)
     } else {
         for (i = start; i <= end; i++) {    
             swap((s+start), (s+i));         // swap(A,B)
+            printf("[%d] %s\n", i, s);
             permute(s, start+1, end);       // permute("ABCD", 1, 3)
             swap((s+start), (s+i));         // swap(B,A) 
         }
