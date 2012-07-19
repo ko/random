@@ -3,7 +3,7 @@
  *
  *  Ken Ko
  *  <email@email.tld>
- *  2011 August
+ *  2011-2012
  */
 
 /* Generating a salted password for the /etc/shadow file */
