@@ -1,6 +1,0 @@
-#!/bin/bash
-cp vimrc ~/.vimrc
-cp -R vim ~/.vim
-mkdir ~/.vimbackup
-cp screenrc ~/.screenrc
-cp dircolors ~/.dircolors
