@@ -10,6 +10,7 @@ count = 0
 
 while count < 250:
     image = cv.QueryFrame(capture)
+    cv.Circle(image, (5,100), 3, (0, 255, 0), -1, 50, 0)
     cv.WriteFrame(writer, image)
     cv.ShowImage('img window', image)
     cv.WaitKey(2)
