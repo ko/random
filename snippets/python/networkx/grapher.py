@@ -11,17 +11,19 @@ G.add_node('6d')
 G.add_node('Canon 6d')
 G.add_node('Canon')
 G.add_node('Canon Inc.')
+G.add_node('Pentax')
 
 # create edges between nodes
 G.add_edge('Camera', 'DSLR', weight=7)
-G.add_edge('DSLR', '6d', weight=2)
+G.add_edge('DSLR', '6d', weight=4)
 G.add_edge('6d', 'Canon 6d', weight=11)
 G.add_edge('Canon 6d', 'Canon', weight=20)
 G.add_edge('Canon', 'Canon Inc.', weight=30)
+G.add_edge('6d', 'Pentax', weight=3)
 
 G.add_edge('Camera', 'Canon 6d', weight=15)
 G.add_edge('DSLR', 'Canon 6d', weight=3)
 
 for n in G.neighbors_iter('6d'):
     rc = G.get_edge_data('6d', n)
-    print rc
+    print n, ':', rc
